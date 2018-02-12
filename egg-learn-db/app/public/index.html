@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/vue.min.js"></script>
+    <script src="js/axios.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="query">
+            <h1>查</h1>
+            <input type="text" v-model="query.id" placeholder="查id">
+            <button @click="queryid">按我查id</button>
+            <div>{{query.mes}}</div>
+        </div>
+        <div class="query">
+            <h1>增</h1>
+            <input type="text" v-model="add.main" placeholder="按照name增加条数">
+            <button @click="ad">按我加数据库</button>
+            <div>{{add.main}}</div>
+        </div>
+        <div class="rewirte">
+            <h1>按id改</h1>
+            <input type="text" v-model="set.id" placeholder="要更改的id">
+            <input type="text" v-model="set.main" placeholder="要录入的内容">
+            <button @click="reset">按我rewrite</button>
+            <div>{{set.mes}}</div>
+        </div>
+        <div class="delete">
+            <h1>删</h1>
+            <h4>先按id删除 如果没有id则按内容删除</h4>
+            <input type="text" v-model="del.id" placeholder="要删除的id">
+            <input type="text" v-model="del.main" placeholder="要删除的内容">
+            <button @click="deleted">按我删除</button>
+            <div>{{del.mes}}</div>
+        </div>
+        <div class="delete">
+            <h1>删</h1>
+            <h4>按id批量删除</h4>
+            <input type="text" v-model="multiplyDel.id" placeholder="要删除的id">
+           
+            <button @click="multDel">按我删除</button>
+            <div>{{del.mes}}</div>
+        </div>
+    </div>
+
+    <script>
+        function getCookie(c_name) {
+
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=")
+                if (c_start != -1) {
+
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+
+                    if (c_end == -1) {
+                        c_end = document.cookie.length
+                    }
+                    return decodeURIComponent(document.cookie.substring(c_start, c_end))
+                }
+            }
+            return ""
+        }
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                query: {
+                    id: "",
+                    mes: ""
+                },
+                add: {
+                    main: "",
+                    mes: ""
+                },
+                set: {
+                    id: 0,
+                    main: "",
+                    mes: ""
+                },
+                del: {
+                    id: "",
+                    main: "",
+                    mes: ""
+                },
+                multiplyDel:{
+                      id: "",
+                       mes: ""
+                }
+            },
+            created() {
+                const csrfToken = getCookie("csrfToken");
+
+                axios.defaults.headers.post['x-csrf-token'] = csrfToken;
+
+            },
+            methods: {
+                queryid: function () {
+                    axios({
+                        method: "post",
+                        url: "/queryid/#USER/2",
+
+                        data: {
+                            id: this.query.id
+                        },
+                    }).then(res => {
+                        this.query.mes = res.data
+                    })
+                },
+                ad: function () {
+                    console.log(1111);
+
+                    axios.post("/add", {
+                        name: this.add.main
+                    }).then(res => {
+                        this.add.mes = res;
+                    });
+                },
+                reset: function () {
+                    axios.post("/reset", {
+                        id: this.set.id,
+                        name: this.set.main,
+
+                    }).then(res => {
+                        this.set.mes = res
+                    })
+                },
+                deleted : function () {
+                    axios.post("/del", {
+                        id: this.del.id,
+                        name: this.del.main,
+                    }).then(res => {
+                        this.del.mes = mes
+                    })
+                },
+                multDel(){
+                     axios.post("/multiplyDel", {
+                        id: this.multiplyDel.id
+                       
+                    }).then(res => {
+                        this.multiplyDel.mes = mes
+                    })
+                }
+
+            }
+        })
+    </script>
+</body>
+
+</html>
