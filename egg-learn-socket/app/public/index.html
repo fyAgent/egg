@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body class="full p_r">
+    <div id="app" class="pos_C container flex">
+
+        <div class="slider shrink0 flex ">
+            <div class="col_l shrink0">
+
+            </div>
+            <div class="col_r grow1">
+
+            </div>
+        </div>
+        <div class="major grow1 flex column">
+            <div class="chat_header shrink0">
+
+            </div>
+            <div class="chat_area  overS  hide_bar">
+                <div class="time_line fullX flexC justC">
+                    <span>3:40</span>
+                </div>
+                <div class="msg_box flex">
+                    <div class="msg_box_l ">
+                        <img src="/public/image/head/default.png" alt="">
+                    </div>
+                    <div class="msg_box_r grow1">
+                        <div class="title">五九</div>
+                        <p>这是我的第一条信息</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat_footer bd_f shrink0 grow1  ">
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+    </script>
+    <script>
+
+        function getCookie(c_name) {
+
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=")
+                if (c_start != -1) {
+
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+
+                    if (c_end == -1) {
+                        c_end = document.cookie.length
+                    }
+                    return decodeURIComponent(document.cookie.substring(c_start, c_end))
+                }
+            }
+            return ""
+        }
+        const log = console.log,
+            vm = new Vue({
+                el: "#app",
+                data: {
+
+                },
+                created() {
+
+
+                },
+                methods: {
+
+
+                }
+            })
+    </script>
+</body>
+
+</html>

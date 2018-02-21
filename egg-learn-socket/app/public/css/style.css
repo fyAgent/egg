@@ -1,0 +1,44 @@
+.container {
+  height: 500px;
+  width: 786px; }
+  .container .slider {
+    flex-basis: 312px; }
+    .container .slider .col_l {
+      background: #26292d;
+      flex-basis: 20%; }
+    .container .slider .col_r {
+      background: #eceae8; }
+  .container .major .chat_header {
+    flex-basis: 15%;
+    background: whitesmoke;
+    border-bottom: 1px solid #e7e7e7; }
+  .container .major .chat_area {
+    background: whitesmoke;
+    flex-basis: 60%;
+    box-sizing: border-box;
+    padding: 10px 30px 12px 30px; }
+    .container .major .chat_area .time_line span {
+      padding: 2px 8px;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 10px;
+      background: #dadada; }
+    .container .major .chat_area .msg_box {
+      padding: 15px; }
+      .container .major .chat_area .msg_box .msg_box_l {
+        box-sizing: border-box;
+        padding: 10px; }
+        .container .major .chat_area .msg_box .msg_box_l img {
+          width: 26px;
+          height: 26px; }
+      .container .major .chat_area .msg_box .msg_box_r .title {
+        color: #b2b2b2; }
+      .container .major .chat_area .msg_box .msg_box_r p {
+        background: #fff;
+        color: #232323;
+        font-size: 14px;
+        padding: 12px;
+        margin: 5px 0;
+        border-radius: 5px; }
+
+/*# sourceMappingURL=style.css.map */
