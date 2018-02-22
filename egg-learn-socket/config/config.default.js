@@ -8,20 +8,25 @@ module.exports = appInfo => {
 
   // add your config here
   config.middleware = [];
-  
-  config.io={
-    init:{
+
+  config.io = {
+    init: {
 
     },
-    namespace:{
-    
-      '/':{
+    namespace: {
+
+      '/': {
+
         connectionMiddleware: ['auth'],
-        packetMiddleware:["packet"]
+        packetMiddleware: ["packet"]
       },
-      "/example":{
-        connectionMiddleware:["connection"],
-        packetMiddleware:[]
+      "/example": {
+        connectionMiddleware: ["connection"],
+        packetMiddleware: []
+      },
+      "/chat": {
+        connectionMiddleware: ["connection"],
+        packetMiddleware: []
       }
 
     }

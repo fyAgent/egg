@@ -87,21 +87,31 @@
             return ""
         }
         let log = console.log;
-
-
         vm = new Vue({
             el: "#app",
             data: {
                 nickName: ""
             },
             created() {
-
+                this.init()
             },
             methods: {
-                changeName(e) {
+                init() {
 
-                    this.nickName = e.target.value;
+                    io = io("/chat").connect()
+                   
+                    io.on("connect", res => {
+                        log("connect")
+                    });
+                    
+                },
+                changeName(e) {
+                    const value =  e.target.value;
+                    this.nickName = value;
+                    console.log(io)
+                    io.emit("login", {name: value})
                     this.$refs.textarea.focus();
+
                 }
 
             }
