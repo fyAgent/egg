@@ -42,18 +42,33 @@
                     </div>
                 </div>
             </div>
-            <div class="chat_footer bd_f shrink0 grow1  ">
+            <div class="chat_footer bd_f shrink0 grow1  flex column">
+                <div class="util_box shrink0">
 
+                </div>
+                <div class="textarea shrink0">
+                    <textarea ref="textarea" class="full hide_bar" cols="30" rows="3"></textarea>
+                </div>
+                <div class="bottom grow1 flex row_r">
+                    <span class="subBtn flexC justC pointer">发送</span>
+                </div>
             </div>
         </div>
+        <transition name="fade">
+            <div v-if="!nickName" class="cover column flexC flex p_a zIdx100 full t0 l0">
+                <h3 class="title textC">
+                    来一个炫酷的名字吧~
+                </h3>
+                <input autofocus class="nickName" @keyup.13="changeName" type="text">
+            </div>
+
+        </transition>
 
     </div>
 
     <script>
-
     </script>
     <script>
-
         function getCookie(c_name) {
 
             if (document.cookie.length > 0) {
@@ -71,21 +86,26 @@
             }
             return ""
         }
-        const log = console.log,
-            vm = new Vue({
-                el: "#app",
-                data: {
-
-                },
-                created() {
+        let log = console.log;
 
 
-                },
-                methods: {
+        vm = new Vue({
+            el: "#app",
+            data: {
+                nickName: ""
+            },
+            created() {
 
+            },
+            methods: {
+                changeName(e) {
 
+                    this.nickName = e.target.value;
+                    this.$refs.textarea.focus();
                 }
-            })
+
+            }
+        })
     </script>
 </body>
 
