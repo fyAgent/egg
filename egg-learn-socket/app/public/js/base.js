@@ -140,5 +140,21 @@ let BASE = {
             segments: a.pathname.replace(/^\//, "").split("/")
         };
         a = null;
+    },
+    getTime(typ, init) {
+        var date = init ? new Date(init) : new Date();
+        var h = date.getHours(),
+            m = date.getMinutes(),
+            s = date.getSeconds();
+
+        switch (typ) {
+            case "hh-mm-ss":
+               
+                return h + ":" + m + ":" + s
+                break;
+
+            default:
+                return ""
+        }
     }
 }

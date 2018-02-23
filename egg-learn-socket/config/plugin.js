@@ -6,3 +6,7 @@ exports.io={
     enabled:true,
     package:"egg-socket.io"
 }
+exports.mysql={
+    enabled:true,
+    package:"egg-mysql"
+}
