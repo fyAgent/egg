@@ -7,8 +7,7 @@ class Login extends Controller {
             app,
             ctx
         } = this;
-        const nsp = app.io.of("/chat"); //命名空间
-
+        
         await ctx.socket.join(room[0]); //进入默认房间
         
         const {

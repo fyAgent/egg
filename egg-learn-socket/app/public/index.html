@@ -33,8 +33,10 @@
 
                 <label v-for="(val,idx) in chatMes" :key="idx">
                     <div v-if="val.tag=='join'" class="time_line fullX flexC justC ">
-                        <span>{{val.time}}</span>
-                        <p>{{val.mes}}加入聊天室</p>
+                        <span>{{val.time}} {{val.msg}}加入聊天室</span>
+                    </div>
+                    <div class="mesBox" v-else-if="val.tag=='msg'">
+                        <p class="msg">{{val.msg}}</p>
                     </div>
 
                     <!-- <div class="msg_box flex">
@@ -56,10 +58,10 @@
 
                 </div>
                 <div class="textarea shrink0">
-                    <textarea ref="textarea" class="full hide_bar" cols="30" rows="3"></textarea>
+                    <textarea @input="userInpt" ref="textarea" class="full hide_bar" cols="30" rows="3"></textarea>
                 </div>
                 <div class="bottom grow1 flex row_r">
-                    <span class="subBtn flexC justC pointer">发送</span>
+                    <span class="subBtn flexC justC pointer" @click="send">发送</span>
                 </div>
             </div>
         </div>
@@ -70,7 +72,6 @@
                 </h3>
                 <input autofocus class="nickName" @keyup.13="changeName" type="text">
             </div>
-
         </transition>
 
     </div>
@@ -78,7 +79,7 @@
     <script>
     </script>
     <script>
-        let log = console.log;
+        let log = console.log,str;
         vm = new Vue({
             el: "#app",
             data: {
@@ -86,29 +87,39 @@
                 userList: [],
                 chatMes: [
 
-                ]
+                ],
+                msg: ""
             },
-
             created() {
                 this.init()
             },
             methods: {
                 init() {
 
-                    io = io("/chat").connect()
+                    io = io("/chat").connect();
 
                     io.on("connect", res => {
 
                     });
+
                     io.on("joinRoom", res => { //新用户加入
                         const time = BASE.getTime("hh-mm-ss")
 
                         this.userList.push(res);
                         this.chatMes.push({
                             tag: "join",
-                            mes: res.nickName,
+                            msg: res.nickName,
                             time
                         })
+                    })
+                    io.on("getMsg", res => {
+
+                        this.chatMes.push({
+                            tag: "msg",
+                            isMe: this.nickName === res.nickName ? true : false,
+                            msg: res.msg
+                        })
+
                     })
                 },
                 changeName(e) {
@@ -120,6 +131,19 @@
                     })
                     this.$refs.textarea.focus();
 
+                },
+                send: function () {
+
+                    io.emit("sendMsg", {
+                        nickName: this.nickName,
+                        msg: this.msg
+                    })
+                    
+                    this.msg = ""
+                },
+                userInpt: function (e) {
+                    this.msg=e.target.value;
+                    str=e.target.value;
                 }
 
             }
