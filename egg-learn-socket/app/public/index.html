@@ -18,47 +18,43 @@
     <div id="app" class="pos_C container flex">
 
         <div class="slider shrink0 flex ">
-            <div class="col_l shrink0">
-
+            <div class="col_l shrink0 textC">
+                <img class="headImg" :src="userInfo.headImg" alt="" />
             </div>
             <div class="col_r grow1">
 
             </div>
         </div>
-        <div class="major grow1 flex column">
+        <div class="major fullY grow1 flex column">
             <div class="chat_header shrink0">
 
             </div>
-            <div class="chat_area  overS  hide_bar">
+            <div class="chat_area shrink0  overS  hide_bar" ref="chatArea">
 
                 <label v-for="(val,idx) in chatMes" :key="idx">
-                    <div v-if="val.tag=='join'" class="time_line fullX flexC justC ">
+                    <div v-if="val.tag=='join'" class="time_line fullX flexC justC">
                         <span>{{val.time}} {{val.msg}}加入聊天室</span>
                     </div>
-                    <div class="mesBox" v-else-if="val.tag=='msg'">
-                        <p class="msg">{{val.msg}}</p>
+                    <div class="msg_box flex" :class="val.isMe ? 'self row_r' :''" v-else-if="val.tag=='msg'">
+
+                        <div class="msg_box_l" >
+                            <img :src="userInfo.headImg" alt=""/>
+                        </div>
+                        <div class="msg_box_r" :class="val.isMe ? 'flexC' : ''">
+                            <div class="title" v-if="!val.isMe">{{val.msg.nickName}}</div>
+                            <p v-html="val.msg.msg"></p>
+                        </div>
+
                     </div>
 
-                    <!-- <div class="msg_box flex">
-                        <div class="msg_box_l ">
-                            <img src="/public/image/head/default.png" alt="">
-                        </div>
-                        <div class="msg_box_r grow1">
-                            <div class="title">五九</div>
-                            <p>这是我的第一条信息</p>
-                        </div>
-                    </div> -->
-
                 </label>
-
-
             </div>
             <div class="chat_footer bd_f shrink0 grow1  flex column">
                 <div class="util_box shrink0">
 
                 </div>
                 <div class="textarea shrink0">
-                    <textarea @input="userInpt" ref="textarea" class="full hide_bar" cols="30" rows="3"></textarea>
+                    <textarea @keyup.ctrl.13="send" @input.trim="userInpt" :value="msg" ref="textarea" class="full hide_bar" cols="30" rows="3"></textarea>
                 </div>
                 <div class="bottom grow1 flex row_r">
                     <span class="subBtn flexC justC pointer" @click="send">发送</span>
@@ -66,88 +62,115 @@
             </div>
         </div>
         <transition name="fade">
-            <div v-if="!nickName" class="cover column flexC flex p_a zIdx100 full t0 l0">
+            <div v-if="!userInfo.nickName" class="cover column flexC flex p_a zIdx100 full t0 l0">
+
                 <h3 class="title textC">
                     来一个炫酷的名字吧~
                 </h3>
+
                 <input autofocus class="nickName" @keyup.13="changeName" type="text">
             </div>
-        </transition>
 
+        </transition>
     </div>
 
     <script>
     </script>
     <script>
-        let log = console.log,str;
-        vm = new Vue({
-            el: "#app",
-            data: {
-                nickName: "",
-                userList: [],
-                chatMes: [
+        let log = console.log,
 
-                ],
-                msg: ""
-            },
-            created() {
-                this.init()
-            },
-            methods: {
-                init() {
 
-                    io = io("/chat").connect();
+            vm = new Vue({
+                el: "#app",
+                data: {
+                    userInfo: {
+                        nickName: "",
+                        headImg: "/public/image/head/head.jpg"
+                    },
+                    msg: "",
+                    userList: [],
+                    chatMes: [
 
-                    io.on("connect", res => {
+                    ]
 
-                    });
-
-                    io.on("joinRoom", res => { //新用户加入
-                        const time = BASE.getTime("hh-mm-ss")
-
-                        this.userList.push(res);
-                        this.chatMes.push({
-                            tag: "join",
-                            msg: res.nickName,
-                            time
-                        })
-                    })
-                    io.on("getMsg", res => {
-
-                        this.chatMes.push({
-                            tag: "msg",
-                            isMe: this.nickName === res.nickName ? true : false,
-                            msg: res.msg
+                },
+                watch: {
+                    chatMes: function () {
+                        this.$nextTick(_ => {
+                            this.$refs.chatArea.scrollTop = this.$refs.chatArea.scrollHeight - this.$refs
+                                .chatArea.offsetHeight
                         })
 
-                    })
-                },
-                changeName(e) {
-                    const value = e.target.value;
-                    this.nickName = value;
-                    console.log(io)
-                    io.emit("login", {
-                        name: value
-                    })
-                    this.$refs.textarea.focus();
 
+                    }
                 },
-                send: function () {
+                created() {
+                    this.init()
+                },
+                methods: {
+                    init() {
 
-                    io.emit("sendMsg", {
-                        nickName: this.nickName,
-                        msg: this.msg
-                    })
-                    
-                    this.msg = ""
-                },
-                userInpt: function (e) {
-                    this.msg=e.target.value;
-                    str=e.target.value;
+                        io = io("/chat").connect();
+
+                        io.on("connect", res => {
+
+                        });
+
+                        io.on("joinRoom", res => { //新用户加入
+                            const time = BASE.getTime("hh-mm-ss")
+
+                            this.userList.push(res);
+                            this.chatMes.push({
+                                tag: "join",
+                                msg: res.nickName,
+                                time
+                            })
+                        })
+                        io.on("getMsg", res => {
+
+                            this.chatMes.push({
+                                tag: "msg",
+                                isMe: this.userInfo.nickName === res.nickName ? true : false,
+                                msg: res
+                            })
+
+                        })
+
+
+                    },
+                    changeName(e) {
+                        const value = BASE.reg.trim(e.target.value);
+                        this.userInfo.nickName = value;
+                        
+                        io.emit("login", {
+                            name: value
+                        })
+
+                        this.$refs.textarea.focus();
+
+                    },
+                    send: function () {
+                        const msg = BASE.reg.trim(this.msg.replace(/\n/g, "<br/>"));
+                        if(!msg) return;
+                        io.emit("sendMsg", {
+                            nickName: this.userInfo.nickName,
+                            msg
+                        })
+
+                        this.msg = ""
+                    },
+                    userInpt: function (e) {
+
+                        this.msg = e.target.value;
+
+                    },
+                    upLoadHeadImg:function(){
+
+                    }
+
+
                 }
-
-            }
-        })
+            })
     </script>
 </body>
 

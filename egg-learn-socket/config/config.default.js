@@ -25,13 +25,13 @@ module.exports = appInfo => {
         packetMiddleware: []
       },
       "/chat": {
-        connectionMiddleware: ["connection","room"],
+        connectionMiddleware: ["connection", "room"],
         packetMiddleware: []
       }
 
     }
   }
-  config.mysql={
+  config.mysql = {
     client: {
       // host
       host: 'localhost',
@@ -49,5 +49,7 @@ module.exports = appInfo => {
     // 是否加载到 agent 上，默认关闭
     agent: false,
   }
+  
+
   return config;
 };

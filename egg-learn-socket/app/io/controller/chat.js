@@ -6,7 +6,8 @@ class Chat extends Controller{
 
         const msg=ctx.args[0];
         const nsp=app.io.of("/chat");
-      
+        await ctx.service.chat.chat(msg);//存数据库
+
         nsp.in(rooms[0]).emit("getMsg",msg);
 
     }
